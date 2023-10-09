@@ -1,0 +1,91 @@
+/*
+44. Wildcard Matching
+Hard
+
+Given an input string (s) and a pattern (p), implement wildcard pattern matching with support for '?' and '*' where:
+
+'?' Matches any single character.
+'*' Matches any sequence of characters (including the empty sequence).
+The matching should cover the entire input string (not partial).
+
+Example 1:
+
+Input: s = "aa", p = "a"
+Output: false
+Explanation: "a" does not match the entire string "aa".
+Example 2:
+
+Input: s = "aa", p = "*"
+Output: true
+Explanation: '*' matches any sequence.
+Example 3:
+
+Input: s = "cb", p = "?a"
+Output: false
+Explanation: '?' matches 'c', but the second letter is 'a', which does not match 'b'.
+ 
+
+Constraints:
+
+0 <= s.length, p.length <= 2000
+s contains only lowercase English letters.
+p contains only lowercase English letters, '?' or '*'.
+*/
+class Solution {
+    static int[][] memo= new int[2001][2001];
+    public boolean isMatch(String s, String p) {
+        //1. Recursions:
+       // return solveRec(s.length(),p.length(),s,p);
+       Arrays.stream(memo).forEach(a->Arrays.fill(a,-1));
+       return solveMemo(s.length(),p.length(),s,p)==1?true:false;
+
+    }
+    public static boolean solveRec(int n,int m,String s , String p){
+        //Base ::
+        if(n==0 && m==0) return true;
+        if(n!=0 && m==0) return false;
+        if(n==0 && m!=0){
+            return checkAllStar(p,m);
+        }
+
+        //choices:
+        if(s.charAt(n-1)==p.charAt(m-1) || (p.charAt(m-1)=='?')){
+            return solveRec(n-1,m-1,s,p);
+        }
+        else if(p.charAt(m-1)=='*'){
+            return solveRec(n-1,m,s,p) || solveRec(n,m-1,s,p);
+        }else{
+            return false;
+        }
+    }
+    public static boolean checkAllStar(String p,int m){
+        for(int i=0;i<m;i++){
+            if(p.charAt(i)!='*'){
+                return false;
+            }
+        }
+        return true;
+    }
+    public static int solveMemo(int n,int m,String s , String p){
+        //Base ::
+        if(n==0 && m==0) return 1;
+        if(n!=0 && m==0) return 0;
+        if(n==0 && m!=0){
+            return checkAllStar(p,m)==true?1:0;
+        }
+
+        if(memo[n][m]!=-1){
+            return memo[n][m];
+        }
+        //choices:
+        if(s.charAt(n-1)==p.charAt(m-1) || (p.charAt(m-1)=='?')){
+            return memo[n][m]=solveMemo(n-1,m-1,s,p);
+        }
+        else if(p.charAt(m-1)=='*'){
+            return memo[n][m]=Math.max(solveMemo(n-1,m,s,p),solveMemo(n,m-1,s,p));
+        }else{
+            return 0;
+        }
+    }
+
+}
