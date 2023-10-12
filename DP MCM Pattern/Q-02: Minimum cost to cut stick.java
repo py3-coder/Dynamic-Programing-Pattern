@@ -1,42 +1,35 @@
 /*
-Matrix Chain Multiplication
-Hard:
-Given a sequence of matrices, find the most efficient way to multiply these matrices together. The efficient way is the one that involves the least number of multiplications.
-The dimensions of the matrices are given in an array arr[] of size N (such that N = number of matrices + 1) where the ith matrix has the dimensions (arr[i-1] x arr[i]).
+Minimum Cost to Cut a Stick
+Hard
+Given a wooden stick of length n units. The stick is labelled from 0 to n. For example, a stick of length 6 is labelled as follows:
+Given an integer array cuts where cuts[i] denotes a position you should perform a cut at.
+You should perform the cuts in order, you can change the order of the cuts as you wish.
+The cost of one cut is the length of the stick to be cut, the total cost is the sum of costs of all cuts.
+When you cut a stick, it will be split into two smaller sticks (i.e. the sum of their lengths is the length of the stick before the cut).
+Please refer to the first example for a better explanation.
+Return the minimum total cost of the cuts.
 
 Example 1:
-Input: N = 5
-arr = {40, 20, 30, 10, 30}
-Output: 26000
-Explanation: There are 4 matrices of dimension 
-40x20, 20x30, 30x10, 10x30. Say the matrices are 
-named as A, B, C, D. Out of all possible combinations,
-the most efficient way is (A*(B*C))*D. 
-The number of operations are -
-20*30*10 + 40*20*10 + 40*10*30 = 26000.
+Input: n = 7, cuts = [1,3,4,5]
+Output: 16
+Explanation: Using cuts order = [1, 3, 4, 5] as in the input leads to the following scenario:
 
+The first cut is done to a rod of length 7 so the cost is 7. The second cut is done to a rod of length 6 (i.e. the second part of the first cut), the third is done to a rod of length 4 and the last cut is to a rod of length 3. The total cost is 7 + 6 + 4 + 3 = 20.
+Rearranging the cuts to be [3, 5, 1, 4] for example will lead to a scenario with total cost = 16 (as shown in the example photo 7 + 4 + 3 + 2 = 16).
 Example 2:
-Input: N = 4
-arr = {10, 30, 5, 60}
-Output: 4500
-Explanation: The matrices have dimensions 
-10*30, 30*5, 5*60. Say the matrices are A, B 
-and C. Out of all possible combinations,the
-most efficient way is (A*B)*C. The 
-number of multiplications are -
-10*30*5 + 10*5*60 = 4500.
 
-Your Task:
-You do not need to take input or print anything. Your task is to complete the function matrixMultiplication() which takes the value N and the array arr[] as input parameters and returns the minimum number of multiplication operations needed to be performed.
+Input: n = 9, cuts = [5,6,1,4,2]
+Output: 22
+Explanation: If you try the given cuts ordering the cost will be 25.
+There are much ordering with total cost <= 25, for example, the order [4, 6, 5, 2, 1] has total cost = 22 which is the minimum possible.
+ 
 
+Constraints:
 
-Expected Time Complexity: O(N3)
-Expected Auxiliary Space: O(N2)
-
-
-Constraints: 
-2 ≤ N ≤ 100
-1 ≤ arr[i] ≤ 500
+2 <= n <= 106
+1 <= cuts.length <= min(n - 1, 100)
+1 <= cuts[i] <= n - 1
+All the integers in cuts array are distinct.
 */
 class Solution {
     static int memo[][] = new int[102][102];
