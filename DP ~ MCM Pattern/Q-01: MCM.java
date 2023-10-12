@@ -62,21 +62,63 @@ class Solution{
         }
         return ans;
     }
-    public static int solveMemo(int arr[],int i,int j){
-        //Base Case::
-        if(i>=j){
-            return 0;
-        }
-        if(memo[i][j]!=-1){
-            return memo[i][j];
-        }
-        int ans=Integer.MAX_VALUE;
-        for(int k=i;k<=j-1;k++){
-            int temp=solveMemo(arr,i,k)+solveMemo(arr,k+1,j)+(arr[i-1]*arr[k]*arr[j]);
-            if(temp<ans){
-                ans=temp;
-            }
-        }
-        return memo[i][j]=ans;
-    }
+   public static int solveMCMmemo(int[] arr,int i, int j){
+		// Base Case :::
+        if(i>=j) return 0;
+		if(memo[i][j]!=-1){
+			return memo[i][j];
+		}
+		int ans=Integer.MAX_VALUE;
+		for(int k=i;k<j;k++){
+			int left,right;
+			if(memo[i][k]!=-1){
+				left =memo[i][k];
+			}else{
+				left =solveMCMmemo(arr,i,k);
+				memo[i][k]=left;
+			}
+
+			if(memo[k+1][j]!=-1){
+				right =memo[k+1][j];
+			}else{
+				right =solveMCMmemo(arr,k+1,j);
+				memo[k+1][j]=right;
+			}
+
+			int temp =left +right +(arr[i-1]*arr[k]*arr[j]);
+			ans =Math.min(ans,temp);
+			memo[i][j] =ans;
+		}
+		return memo[i][j]=ans;
+	}
+
+    // Tabulation Rules: Bottom up dp -- MCM pattern always bottom up dp ends.
+    // 1. Base Case - Initilisatio:
+    // 2. Loop for i and j -- imp: reverse it almost case works
+    // 3. Edge case for i cross j -- vimp
+    //4. copy the recursion and change the variable
+    //5. Return tab[1][n-1] always
+	public static int SolveTabulation(int arr[]){
+		//Tabulation::
+		int n=arr.length;
+		int dp[][] = new int[n][n];
+		Arrays.stream(dp).forEach(a->Arrays.fill(a,-1));
+		//Base Case --> Initlisation::
+		for(int i=1;i<n;i++){
+			dp[i][i]=0;
+		}
+
+		for(int i=n-1;i>=1;i--){
+			for(int j=i+1;j<n;j++){
+				int ans=Integer.MAX_VALUE;
+				for(int k=i;k<j;k++){
+					int ops =dp[i][k] + dp[k+1][j] +(arr[i-1]*arr[k]*arr[j]);
+					ans =Math.min(ops,ans);
+				}
+				dp[i][j]=ans;
+			}
+		}
+		return dp[1][n-1];
+
+	}
 }
