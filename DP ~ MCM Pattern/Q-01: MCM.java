@@ -93,7 +93,7 @@ class Solution{
 	}
 
     // Tabulation Rules: Bottom up dp -- MCM pattern always bottom up dp ends.
-    // 1. Base Case - Initilisatio:
+    // 1. Base Case - Initilisation -- fill dp with -1/0 as per req.
     // 2. Loop for i and j -- imp: reverse it almost case works
     // 3. Edge case for i cross j -- vimp
     //4. copy the recursion and change the variable
@@ -102,6 +102,7 @@ class Solution{
 		//Tabulation::
 		int n=arr.length;
 		int dp[][] = new int[n][n];
+		// 
 		Arrays.stream(dp).forEach(a->Arrays.fill(a,-1));
 		//Base Case --> Initlisation::
 		for(int i=1;i<n;i++){
