@@ -2,7 +2,6 @@
 Author : Saurabh Kumar
 Link Problem : https://cses.fi/problemset/task/1634/
 */
-
 import java.util.Arrays;
 import java.util.Scanner;
 
