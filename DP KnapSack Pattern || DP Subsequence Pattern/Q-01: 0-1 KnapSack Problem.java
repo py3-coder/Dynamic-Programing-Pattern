@@ -114,6 +114,28 @@ class Solution
         }
         return tab[n][w];
     }
+    //Space Optimize.
+    // TC : O(n*w)
+    // SC : 2*O(w)
+    public static int solveOpt(int W,int[] wt, int[] val,int n){
+        
+        int[] curr = new int[W+1];
+        int[] prev = new int[W+1];
+        
+        for(int i=1;i<n+1;i++){
+            for(int j=1;j<W+1;j++){
+                if(wt[i-1]>j){
+                    curr[j] =prev[j];
+                }else{
+                    curr[j] = Math.max(prev[j-wt[i-1]]+val[i-1] , prev[j]);
+                }
+            }
+            for(int k=0;k<W+1;k++){
+                prev[k] = curr[k];
+            }
+        }
+        return curr[W];
+    }
     
 }
 
