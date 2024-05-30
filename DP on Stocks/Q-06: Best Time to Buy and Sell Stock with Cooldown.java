@@ -112,3 +112,77 @@ static int memo[][] = new int[5001][2];
         }
         return curr[0];
     }
+// Same way diff code :-
+//--------------------------------------------------------------------------------------
+class Solution {
+    static int[][] memo;
+    public int maxProfit(int[] prices) {
+        int n =prices.length;
+        // memo = new int[n+1][2];
+        // Arrays.stream(memo).forEach(a->Arrays.fill(a,-1));
+        //return solveRec(prices,0,0);
+        
+        //return solveTab(prices);
+        
+        return solveOpt(prices);
+    }
+    
+    public int solveRec(int[] prices, int indx, int buy){
+        //Base Case ::
+        if(indx>=prices.length){
+            return 0;
+        }
+        if(memo[indx][buy]!=-1){
+            return memo[indx][buy];
+        }
+        int profit =0;
+        if(buy==0){
+           profit =-prices[indx] +solveRec(prices,indx+1,1);    
+        }else{
+            profit = prices[indx] + solveRec(prices,indx+2,0) ; 
+        }
+        int skip = solveRec(prices,indx+1,buy);
+        
+        return memo[indx][buy] = Math.max(profit,skip);
+    }
+    public int solveTab(int[] prices){
+        int n =prices.length;
+        int[][] tab =  new int[n+2][2];
+        
+        for(int i=n-1;i>=0;i--){
+            for(int j=0;j<2;j++){
+                int profit =0;
+                if(j==0){
+                   profit =-prices[i] +tab[i+1][1];    
+                }else{
+                    profit = prices[i] +tab[i+2][0] ; 
+                }
+                int skip = tab[i+1][j];
+                tab[i][j] = Math.max(profit,skip);     
+            }
+        }
+        return tab[0][0];
+    }
+    public int solveOpt(int[] prices){
+        int n =prices.length;
+        int[] curr =  new int[2];
+        int[] ahead =  new int[2];
+        int[] ahead2 = new int[2];
+        
+        for(int i=n-1;i>=0;i--){
+            for(int j=0;j<2;j++){
+                int profit =0;
+                if(j==0){
+                   profit =-prices[i] +ahead[1];    
+                }else{
+                    profit = prices[i] +ahead2[0]; 
+                }
+                int skip = ahead[j];
+                curr[j] = Math.max(profit,skip);     
+            }
+            System.arraycopy(ahead, 0, ahead2, 0, 2);
+            System.arraycopy(curr, 0, ahead, 0, 2);
+        }
+        return curr[0];
+    }
+}
